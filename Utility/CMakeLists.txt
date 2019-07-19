@@ -1,2 +1,2 @@
 
-add_library(Utility SHARED Checker.cc Exception.cc Internet_Checksum.cc)
+add_library(Utility Checker.cc Exception.cc Internet_Checksum.cc)
