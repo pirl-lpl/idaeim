@@ -17,5 +17,5 @@ write_basic_package_version_file(${PROJECT_NAME}-config-version.cmake VERSION ${
    COMPATIBILITY SameMajorVersion
 )
 
-export(TARGETS ${PROJECT_NAME} NAMESPACE ${PROJECT_NAME}:: FILE ${PROJECT_NAME}-config.cmake)
+export(TARGETS PVL Strings Utility NAMESPACE ${PROJECT_NAME}:: FILE ${PROJECT_NAME}-config.cmake)
 export(PACKAGE ${PROJECT_NAME})
