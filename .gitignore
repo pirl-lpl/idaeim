@@ -20,3 +20,4 @@ obj/
 obj_release/
 obj_debug/
 moc_debug/
+.vs/
