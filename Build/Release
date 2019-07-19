@@ -1,0 +1,337 @@
+#!/bin/csh -f
+#
+#	Release a software module from a CVS repository.
+#
+#	Usage:
+#
+#	Release [<options>] <module> [...]
+#	  modules -
+#	    Any module (directory) available from the current CVS repository
+#	      designated by the CVSROOT environment variable.
+#	  options -
+#	    -Cvs_root <path>
+#	      CVS repository root pathname.
+#	        Default: The value of the CVSROOT environment variable
+#	    -Directory <directory>
+#	      Directory where the released modules will be located.
+#	        Default: The value of the RELEASE_DIR environment variable
+#	          or .
+#	    -Tag <tag>
+#	      The tagged files that will be released.
+#	        Default: The value of the RELEASE_TAG environment variable
+#	          or HEAD
+#	    -[No_]Strip
+#	      Strip DEBUG sequences from the code.
+#	        Default: no_strip
+#	    -[No_]Make
+#	      Run $MAKE for each module if a Makefile exits.
+#	        Default: no_make
+#	    -Group <group>
+#	      Set all released files to be in the specified group.
+#	        Default: none
+#	    -Permissions <modes>
+#	      Set all released files using the specified permission modes.
+#	        Default: none
+#
+#	Description:
+#
+#	The module files with the specified Tag (default: $RELEASE_TAG or
+#	HEAD) are exported from the specified Cvs_root (default: $CVSROOT)
+#	repository into the Module.release subdirectory of the specified
+#	Directory (default: $RELEASE_DIR or .). During the CVS export
+#	keywords are -kv expanded.
+#
+#	If Stripping is enabled all files with names matching the patterns in
+#	the $DEBUG_FILES environment variable (default: '*.cc *.cpp *.java
+#	*.h *.hh') are stripped of their DEBUG sections. Having setup a new
+#	Module.release directory the existing Module directory, if any, is
+#	renamed Module.old and the Module.release directory is renamed
+#	Module.
+#
+#	If Make is enabled and the Module contains a Makefile the $MAKE
+#	(default: gmake) utility is executed in the Module directory.
+#	Finally, if all is well, the Module.old directory is removed.
+#
+#	If a Group is specified all module files will be set to be in that
+#	group.
+#
+#	If Permissions are specified - these may be symbolic or numeric - all
+#	module files will be be set to have those permissions.
+#
+#	Note that every effort is made to protect an existing Module
+#	directory and, if a problem is encountered, to restore it under its
+#	orginal name.
+#
+#	Author:
+#
+#		Bradford Castalia, idaeim
+#
+#	CVS ID: Release,v 1.11 2008/01/16 19:52:03 castalia Exp
+
+set procedure     = `basename $0`
+
+if (! $?RELEASE_DIR) set RELEASE_DIR = '.'
+if (! $?RELEASE_TAG) set RELEASE_TAG = 'HEAD'
+if (! $?DEBUG_FILES) set DEBUG_FILES = '*.cc *.cpp *.h *.hh'
+if (! $?MAKE)        set MAKE        = gmake
+
+set CVS_proc = cvs
+set unDEBUG  = strip_DEBUG
+set CWD      = $PWD
+
+if ($#argv < 1) then
+	Usage:
+	echo "Usage: ${procedure} [-<option> [...]] <module> [...]"
+	echo "  modules -"
+	echo "    Any module (directory) available from the current CVS repository"
+	echo "      designated by the CVSROOT environment variable."
+	echo "    The module will be installed in the directory specifed by the"
+	echo "      RELEASE_DIR environment variable (default: .)."
+	echo "  options -"
+	echo "    -Cvs_root <path>"
+	echo "      CVS repository root pathname."
+	echo "        Default: The value of the CVSROOT environment variable."
+	echo "    -Directory <directory>"
+	echo "      Directory where the released modules will be located."
+	echo "        Default: The value of the RELEASE_DIR environment variable or '.'"
+	echo "    -Tag <tag>"
+	echo "      The tagged files that will be released."
+	echo "        Default: The value of the RELEASE_TAG environment variable or HEAD"
+	echo "    -[No_]Strip"
+	echo "      Strip DEBUG sequences from the code."
+	echo "        Default: no_strip"
+	echo "    -[No_]Make"
+	echo "      Run $MAKE for each module if a Makefile exits."
+	echo "        Default: no_make"
+	echo "    -Group <group>"
+	echo "      Set all released files to be in the specified group."
+	echo "        Default: none"
+	echo "    -Permissions <modes>"
+	echo "      Set all released files using the specified permission modes."
+	echo "        Default: none"
+	exit 1
+endif
+
+set Modules = ()
+
+while ($#argv)
+	switch ($1)
+		case -[Cc]*:
+			shift
+			setenv CVSROOT $1
+			breaksw
+		case -[Dd]*:
+			shift
+			set RELEASE_DIR = $1
+			breaksw
+		case -[Tt]*:
+			shift
+			set RELEASE_TAG = $1
+			breaksw
+		case -[Ss]*:
+			set unDEBUG_proc = $unDEBUG
+			breaksw
+		case -[Nn]*[Ss]*:
+			unset unDEBUG_proc
+			breaksw
+		case -[Mm]*:
+			set MAKE_proc = $MAKE
+			breaksw
+		case -[Nn]*[Mm]*:
+			unset MAKE_proc
+			breaksw
+		case -[Gg]*:
+			shift
+			set Group = $1
+			breaksw
+		case -[Pp]*:
+			shift
+			set Permissions = $1
+			breaksw
+		case -*:
+			goto Usage
+		default:
+			set Modules = ($Modules $1)
+			breaksw
+	endsw
+	shift
+end
+
+if (! $?CVSROOT) then
+	echo "${procedure}: A CVS repository root path must be provided."
+	goto Usage
+endif
+setenv CVSROOT $CVSROOT
+
+if (! $#Modules) then
+	echo "${procedure}: A CVS module must be specified."
+	goto Usage
+endif
+#	Remove any trailing pathname delimter.
+set Modules = ($Modules:gh)
+
+if ($?unDEBUG_proc) then
+	#	Find the unDEBUG_proc.
+	foreach pathname ($path)
+		if (-x $pathname/$unDEBUG_proc && -f $pathname/$unDEBUG_proc) then
+			set found_unDEBUG_proc = 1
+			break
+		endif
+	end
+	if (! $?found_unDEBUG_proc) then
+		echo "${procedure}: Unable to locate the $unDEBUG_proc procedure."
+		echo "    No_Debug_stripping will be done."
+		unset $unDEBUG_proc
+	endif
+endif
+	
+echo "${procedure}: Exporting from CVS repository: $CVSROOT"
+echo "${procedure}: Releasing to directory: $RELEASE_DIR"
+cd $RELEASE_DIR
+if ($status) exit 1
+set Status = 0
+
+#-------------------------------------------------------------------------------
+foreach Module ($Modules)
+
+echo
+echo "${procedure}: $Module"
+
+set Module_dir  = $Module
+set Release_dir = $Module.Release
+set Old_dir     = $Module_dir.old
+
+#	Export the CVS module into the $Release_dir directory.
+#
+#	Do this BEFORE removing the original module
+#	just in case something goes wrong, or the
+#	the contents of the original contain something needed here.
+
+if (-d $Release_dir) then
+	#	Remove previous Release attempt.
+	/bin/rm -rf $Release_dir
+	if ($status) then
+		echo
+		echo "${procedure}: Couldn't remove the pre-existing $Release_dir directory."
+		set Status = 1
+		goto Finish
+	endif
+endif
+
+echo "${procedure}: Exporting the $Module CVS module."
+echo "$CVS_proc export -kv -f -r $RELEASE_TAG -d $Release_dir $Module"
+$CVS_proc export -kv -f -r $RELEASE_TAG -d $Release_dir $Module
+if ($status) then
+	/bin/rm -rf $Release_dir
+	echo "${procedure}: The cvs export of $Module to the $Release_dir directory failed."
+	set Status = 1
+	goto Finish
+endif
+
+if ($?unDEBUG_proc) then
+
+	#	Remove DEBUG sections from the code.
+	echo
+	echo "${procedure}: Stripping the source files of DEBUG sections."
+
+	set nonomatch
+	set noglob
+	set file_patterns = ($DEBUG_FILES)
+	foreach pattern ($file_patterns)
+		find $Release_dir \
+			-name "$pattern" \
+			-exec echo "$unDEBUG_proc -r" {} \; \
+			\! -exec $unDEBUG_proc -r {} \; \
+			-exec "${procedure}: $unDEBUG_proc of " {} "failed." \; \
+			-exec rm {}.stripped \;
+	end
+	unset noglob
+endif
+
+#	Rename any existing $Module_dir to $Old_dir, and
+#	rename the $Release_dir to be the new $Module_dir.
+
+if (-d $Module_dir) then
+	if (-d $Old_dir) then
+		/bin/rm -rf $Old_dir
+		if ($status) then
+			echo
+			echo "${procedure}: Couldn't remove the pre-existing $Old_dir directory."
+			echo "  The Release files are in the $Release_dir directory."
+			set Status = 1
+			goto Finish
+		endif
+	endif
+	/bin/mv $Module_dir $Old_dir
+	if ($status) then
+		echo
+		echo "${procedure}: Couldn't move the previous $Module_dir directory to $Old_dir."
+		echo "  The Release files are in the $Release_dir directory."
+		set Status = 1
+		goto Finish
+	endif
+endif
+/bin/mv $Release_dir $Module_dir
+if ($status) then
+	echo
+	echo "${procedure}: Couldn't move the $Release_dir directory to $Module_dir."
+	if (-d $Old_dir) then
+		/bin/mv $Old_dir $Module_dir
+		if ($status) then
+			echo "${procedure}: Couldn't move the $Old_dir directory back to $Module_dir."
+		endif
+	endif
+	set Status = 1
+	goto Finish
+endif
+
+if ($?MAKE_proc && -f $Module_dir/Makefile) then
+
+	#	Make the Module.
+	echo
+	echo "${procedure}: Making in the $Module_dir directory."
+	(cd $Module_dir; $MAKE)
+	if ($status) then
+		echo "${procedure}: Couldn't make the module."
+		set Status = 1
+		goto Finish
+	endif
+endif
+
+#	Remove the old directory.
+/bin/rm -rf $Old_dir
+if ($status) then
+	echo
+	echo "${procedure}: Couldn't remove the old module directory"
+	echo "  which is now named $Old_dir."
+endif
+
+if ($?Group) then
+
+	#	Change the file group.
+	chgrp -R $Group $Module_dir
+	if ($status) then
+		echo "${procedure}: Couldn't set files to group $Group."
+		set Status = 1
+		goto Finish
+	endif
+endif
+
+if ($?Permissions) then
+
+	#	Change the file permissions.
+	echo "Changing file permissions to $Permissions"
+	find $Module_dir \
+		-type f \
+		-exec chmod $Permissions {} \;
+endif
+
+
+#	foreach Module
+end
+
+Finish:
+cd $CWD
+
+exit $Status
+

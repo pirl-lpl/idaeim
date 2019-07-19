@@ -1,0 +1,161 @@
+idaeim libraries release notes
+
+
+2.3.2:
+
+Utility 1.14 -
+
+	Added Hex_Notation flag to Checker.
+	Added Checker methods for char types.
+	Added byte array check function to Checker.
+	Enhanced Exception::add_message logic.
+
+Qt_Utility 1.8.11 -
+
+	Log_Lock set to be recursive.
+	Added is_pathname function to Qstrings.
+	Added resolved_reference to Qstrings.
+	Enhanced URL.Check.
+	Added HOST_IS_MSB to misc.
+	Added check QString function to URL_Checker.
+	Added has_{recognized_}scheme to Qstrings.
+	Added pathname_suffix function to Qstrings.
+	Added swap_bytes function to misc.
+	URL_Fetcher data flush after fetching to file.
+	Added bits_mask to misc.
+	Added content_size to URL_Checker.
+	Modified magnitude_of in Qstrings.
+	Added fetch to data buffer method in URL_Fetcher.
+	Added QIODevice_for utility function to URL_Checker.
+	Added URL_Fetcher; Revised Network_Status.
+	Corrections to Qstrings is_{file_}URL methods.
+	Using DBL_EPSILON  for TO_INTEGER_EPSILON in Qrounders.
+	OS X std::string with ostringstream problem workaround in PDS_Metadata.
+	Added sample_value function to misc.
+	Added MSB_host function to misc.
+	Added bytes_for_bits to misc.
+	Changed image_reader_formats in Qstrings to not force "jp2" inclusion.
+
+	Qt_PDS_Plugin 1.5 -
+
+	Changed calculation of Suffix_Bytes[COLUMN_SUFFIX].
+	Corrected default valid data limits in PDS_Handler.
+
+
+2.3.1:
+
+Build -
+
+	Enhancements to Qt_docs.pri support file.
+	Enhancements to Makefile for better dist capabilities.
+
+Qt_Utility -
+
+	Workaround for OS X compile gotcha applied to PDS_Metadata.
+	Enhancements to Qstrings and misc components.
+
+
+2.3:
+
+Qt_PDS_Plugin -
+
+Corrected display bug for memory mapped files with prefix or suffix bytes.
+Added EOL parameters.
+
+JP2 (unreleased library) -
+
+Documentation cleanup and minor bug fixes for JP2 libraries.
+
+
+2.2:
+
+Makefile.conf enhancements to support non-compiled SCRIPTS and POD.
+
+
+2.1:
+
+Documentation (doxygen configuration) enhancements and cleanup.
+Build/Makefile and Qt_xxx.pri enhancements.
+Qt_PDS_Plugin DEFAULT_QIMAGE_FORMAT set to QImage::Format_RGB32.
+
+
+2.0:
+
+Added two new Qt modules: Qt_PDS_Plugin and Qt_Utility; the former is
+dependent on the latter as well as the PVL module.
+
+Added the Selection class and select method to the PVL::Aggregate class.
+
+Upgraded the Build/Makefile to manage the Qt module builds (see the
+INSATLL document).
+
+Fixed a bug in Strings/String to correct ambiguous type of
+SIGNED,UNSIGNED in constructor signature matching.
+
+
+1.3.2:
+
+Enhacements to Utility::Checker.
+Modified Doxygen file management.
+Cleanup and minor bug correction in Makefiles.
+
+
+1.2.8:
+
+Modified PVL::Parser to fix memory leak.
+
+
+1.2.7:
+
+Modified PVL::Lister to honor Parser::CONTAINER_NAME for Aggregates
+	to prevent container aggregate Begin_/End_ listing
+	event when Aggregate has a parent.
+
+
+1.2.6:
+
+Enhanced PVL Aggregate, Array, and Vectal classes
+	with insert and remove methods using element index,
+	and other conveniences.
+
+
+1.2.5:
+
+Enhanced Build support for Apple Mac fat (universal) libraries.
+
+
+1.2.4:
+
+Minor code cleanup and optimizations.
+
+
+1.2.3:
+
+Syntax lint picking to prevent compiler warnings.
+
+
+1.2.2:
+
+PVL/Vectal Iterator return types syntax change to satisfy MSVC.
+All unit tests now use the Checker utility to produce consistently
+formatted reports.
+
+
+1.2.1:
+
+Fix for impossible undefined Depth_Iterator condition in PVL::Parameter
+and PVL::Value. The condition only occurred on MS/Windows with MVSC build.
+
+
+1.2:
+
+Makefiles upgraded with support for MSVC compiler on MS/Windows.
+Revised PVL/Vectal. Applications may need to be rebuilt.
+
+
+1.11.1:
+
+Added Build support for Apple Mac fat (universal) libraries.
+
+
+CVS ID: Notes,v 1.7 2014/04/15 06:17:00 castalia Exp

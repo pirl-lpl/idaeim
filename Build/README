@@ -1,0 +1,116 @@
+The idaeim Software
+
+The idaeim software provides a set of C++ classes for the manipulation
+of Parameter Value Language (PVL) constructs with supporting String
+manipulation and Exception management classes. Additional libraries
+are provided that provide capabilities for use with the Qt framework.
+
+
+* PVL
+
+The Parameter Value Language provides a syntax for for associating a
+named parameter with a value of some type. The idaeim implementation is
+an extension of the International Standards Organization (ISO) Final
+Draft International Standard (ISO 14961:2002) keyword value type
+language for naming and expressing data values.
+
+A language syntax Parser is provided with application selectable
+tolerance and fine grained PVL statement handling.
+
+An abstract Parameter class contains the parameter name and a
+descriptive comment associated with it. An Assignment subclass contains
+a Value for the Parameter. An Aggregate subclass is a Vectal (Vector of
+Virtuals, which implements the standard vector interface) of Parameters
+which provides for an unlimited hierarchy of Parameters. A
+Depth_Iterator is provided for depth-first bidirectional traversal of
+an Aggregate hierarchy; this supplements the usual list iterators
+implemented by the Vectal.
+
+An abstract Value class provides data characteristics: digits for use
+in text representations controlling numeric precision or field width,
+the base radix, and a units description. Integer, Real and String
+subclasses implement specific data types. These types can be implicitly
+converted and assigned to/from each other and the usual primitive data
+types whenever valid (not every String represents a numeric value) and
+a set of basic operators is defined for them. An Array subclass is a
+Vectal of Values that allows multi-dimensional, non-rectangular arrays
+of mixed types. An Array Depth_Iterator is provided.
+
+Both Parameter and Value classes include I/O methods and operators that
+handle PVL statement parsing and listing.
+
+A Lister class is used to generate PVL statements. It provides syntax
+mode control for static defaults and lister specific settings that
+supplement Parameter specific settings. Syntax modes control various
+aspects of the ISO standards as well as formatting (indenting,
+assignment alignment and line wrapping) that offers considerable
+flexibility as well as strict conformance to the standard. A Lister
+can be used as an output operator manipulator.
+
+
+* Strings
+
+The String class, a subclass of the STL string class, offers various
+convenience methods used by the PVL Parser.
+
+The Sliding_String class, a subclass of String, provides the base class
+for the PVL Parser. This presents a String/string interface to an
+istream that provides the source of characters; the character source
+may also be just a standard string, of course. The Sliding_String
+"slides" forward along the istream as needed to fulfill a demand for
+characters beyond the current backing string cache. Characters that
+have already been "consumed" by the application will be dropped from
+the cache thus providing an efficient, and effectively unlimited,
+virtual string. Control over the cache read-ahead and character input
+limit is provided.
+
+In addition, the application may dynamically bind, and selectively
+remove, input filters to a Sliding_String that are applied in the
+application specified order to all characters obtained from an istream.
+A virtual String_Filter class defines the very simple interface (5
+methods: identification, enable and disable, filter, and a destructor)
+for filters used by a Sliding_String. Two implementations, used by the
+PVL Parser, are provided: VMS_Records_Filter handles binary sized
+records that were used to create data files on DEC VMS systems (e.g.
+Planetary Data System files from early spacecraft missions) with
+automatic VMS record detection and filter enable/disable operation.
+Line_Count_Filter keeps track of the line-relative position (line
+number and character offset within a line) of locations in the
+Sliding_String.
+
+
+* Utility
+
+This module abstracts the common STL exceptions. It adds a flexible
+message control mechanism with caller identification suitable for use
+in exception chaining where a consistent caller traceback and
+description details are desired.
+
+
+* Qt_Utility
+
+This module provides a QIODevice to std::istream adapter, a general
+lock for use in synchronizing log reports in multi-threaded applications,
+a set of output operators to std::ostream for common Qt geometry classes,
+functions for controlled rounding of geometry coordinates, and various
+functions for use with strings and other miscellaneous capabilities.
+
+
+* Qt_PDS_Plugin
+
+A plugin library is provided for use in reading a wide variety of PDS image
+files into QImage objects for display.
+
+
+Contact:
+
+Bradford Castalia
+Systems Analyst
+idaeim
+712 N. Seventh Ave.
+Tucson, Arizona 85705
+Castalia@idaeim.com
+
+"Build an image in your mind, fit yourself into it."
+
+CVS ID: README,v 1.1 2013/02/25 00:51:17 castalia Exp

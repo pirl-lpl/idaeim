@@ -1,0 +1,184 @@
+INSTALL
+idaeim Software
+
+
+Requirements:
+
+The PVL, Strings, and Utility libraries have no external dependencies other
+than the use of the GNU make 3.81 syntax in the Makefiles and the GNU C++
+compiler. On MS/Windows the MSVC C++ compiler and cygwin system utilities
+will work. The libraries are known to build correctly on FreeBSD, Linux
+(Ubuntu and Suse x86_64), Solaris, OS-X (up to 10.8.2 PowerPC, x86, and
+x86_64), and MS/Windows (XP through Windows 7).
+
+The Qt_PDS_Plugin and Qt_Utility libraries are dependent on the Qt 4.x
+framework. The inherently portable nature of this framework is suupported
+on numerous platforms, in addition to those noted above.
+
+The documentation files are dependont on Doxygen
+(http://www.stack.nl/~dimitri/doxygen/) which uses Graphviz
+(http://www.graphviz.org/) to produce the relationship diagrams in the
+documentation.
+
+
+Build:
+
+The distribution package contains a Build directory, which is where you
+should have found this file. The Build/Makefile contains targets to
+build each of the modules. By default all of the modules will be built.
+To build and install all the modules from the Build directory:
+
+make install
+
+This will attempt to compile the library files and generate the
+documentation files and install them all along with the class interface
+header files in the lib, docs, and include subdirectories, respectively,
+of the INSTALL_DIR directory. By default INSTALL_DIR is the parent (..)
+of the Build directory, which should be the distribution package
+directory. Define INSTALL_DIR on the make command line or as an
+environment variable to be the root directory (a.k.a. prefix) where you
+would prefer to have the module files installed (e.g. /usr/local) on your
+system. The modules will be built without being installed by using the
+default make target (a.k.a. "modules" in the Build/Makefile).
+
+To prevent building the Qt modules (perhaps because the Qt framework is
+not available on the host system) define NO_QT.
+
+One or more modules can be selected for building by defining MODULES as
+the list of modules to be built. For example:
+
+make MODULES="PVL Strings Utility"
+
+This will just build the PVL, Strings, and Utility moudles (this is the
+same is defining NO_QT).
+
+Because of cross-dependencies amongst the modules, they must be built in
+the correct order: the group Utility, Strings, and PVL with the latter
+depending on the former; and Qt_PDS_Plugin depending on Qt_Utility and
+all of the other modules. The Build/Makefile will always build modules in
+the correct order. In the example, above, the order in which the selected
+modules are built is changed from the order in which they are listed.
+However, if a dependent module is not built when a selected module is
+built the build will fail.
+
+The modules can also be built individually from their source code
+directories. The PVL, Strings, and Utility modules each contains its own
+Makefile that controls the particulars of building and installing its
+components, but each expects the Build/Makefile.conf to provide the
+required build configuration. The Qt modules each contains a Qt project
+configuratin file - <module>.pro - that is used by the Qt qmake utility
+to generate a Makefile appropriate for the host operating system. The
+Build/Makefile will automatically invoke qmake as needed to generate
+the required module Makefile, or qmake can be run manually in the module
+directory.
+
+Data precision and 64-bit support -
+
+The Utility/Types.hh file defines the high precision data types used by
+the Strings::String and PVL::Value classes. For integer values the
+default is to use the long long data type to obtain 64-bit precision and
+define the idaeim_LONG_LONG_INTEGER macro; for floating point values the
+default is to use the double data type and not define the
+idaeim_LONG_DOUBLE macro. The macros are used to control conditional
+inclusion of type sensitive methods where ambiguity would result without
+them. The use of the long long data type will work correctly even on
+32-bit architectures as long as the compiler supports the long long data
+type. If this support is not available on the host system, or there is
+any other reason to change the default types, then modify the Types.hh
+file accordingly before compling the library.
+
+Qt plugin installation -
+
+The Qt_PDS_Plugin module builds a dynamic library that can be recognized
+by the Qt framework at application runtime as a plugin for handling the
+PDS image file format. To enable the plugin to be found it should be
+installed in an "imageformats" directory that is in the QCoreApplication
+dynamic library search path. The PLUGIN_INSTALL_DIR specifies the plugin
+library installation location. By default this is set in the
+Qt_PDS_Plugin.pro configuration file to the location of other image file
+format plugins. It is likely that this location will require priveleged
+access to install the plugin library. Alternatively it can be defined as
+an environment variable or on the make command line when the
+Build?makefile is used and it will be passed to qmake when the
+Qt_PDS_Plugin module Makefile is generated. In this case applications
+must know to where to look for the plugin library for it to be used.
+N.B.: The PLUGIN_INSTALL_DIR value will only be effective at the time
+that qmake is run.
+
+The default QImage format that the PDS_Handler should generate if not
+otherwise specified at runtime is determined by the DEFAULT_QIMAGE_FORMAT
+value when qmake is run. The value of DEFAULT_QIMAGE_FORMAT may be specified
+in an environment variable, or make command line option, of the same name
+when the Qt_PDS_Plugin module is build by the Build/Makefile. It may also
+be specified directly on the qmake command line, or in the Qt_PDS_Plugin.pro
+file as the preferred value if not specified othewise.
+
+
+Documentation:
+
+Documentation for all modules, in HTML form, is included in the
+distribution package. The complete, cross linked set of documentation
+files are contained under the docs directory under the html/idaeim
+subdirectory with an index.html home page. The files for each module are
+contained in their own subdirectory named for the module.
+
+The documentation files are generated by Doxygen and Graphviz in a docs
+subdirectory of each module's source code directory, then copied into the
+docs subdirectory of the DOCS_INSTALL_DIR directory during installation.
+By default DOCS_INSTALL_DIR is the same as INSTALL_DIR. The "docs" make
+target will attempt to generate the documentation files, "docs_install"
+will install them, and "docs_clean" will remove the module docs
+subdirectories. N.B.: the "distclean" target will remove the module docs
+subdirectories, but the "clean" target will not.
+
+
+Tests:
+
+A tests subdirectory is present in each module's source code directory,
+except Utility. The test programs must be built within their directories
+after the all the module libraries on which they depend have been built.
+Each test directory contains a Makefile, or qmake project configuration
+file from which a Makefile can be generated, to build the test programs.
+
+The PVL, Strings, and Qt_Utility tests are unit test programs that take
+no arguments - except an optional -Verbose switch - and report the PASS
+or FAIL condition for each test performed. The Qt_Utility/Qistream_test
+can also take a file pathname argument which will result in a GUI for
+testing against named files. The Qt_PDS_Plugin tests each required a file
+pathname argument and produce a GUI in addition to report listings that
+provides the results of the tests that are applied.
+
+The PVL/tests/PVL program is a utility for selectively reporting the PVL
+contents of a file. Use the -Help command line option to get the usage
+description.
+
+
+Exceptions:
+
+Each class file contains an ID constant that provides the class name and
+its CVS revision number and date. Exception messages should include this
+ID. If you discover what appears to be a bug in a module please report
+the bug with a description of the use case including complete exception
+messages, and an example file that demonstrates the problem.
+
+The source code files are normally distributed stripped of their DEBUG
+instrumentation sections. A DEBUG form of the distribution is available
+for anyone who would like to take advantage of the DEBUG instrumentation
+for bug hunting.
+
+
+Contact:
+
+The author can be contacted - but can not guarantee a reply - to report
+bugs, suggest improvements, offer enhancements, or inquire about
+participation in idaeim software development.
+
+Bradford Castalia
+Systems Analyst
+idaeim
+712 N. Seventh Ave.
+Tucson, Arizona  85705
+Castalia@idaeim.com
+
+
+CVS ID: INSTALL,v 1.5 2013/03/31 02:10:26 castalia Exp

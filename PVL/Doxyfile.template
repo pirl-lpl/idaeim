@@ -1,0 +1,99 @@
+#	Doxyfile.template
+#
+#	From Doxygen v1.7.4
+#
+#	This file adds to or overrides the settings in the Doxfile.common file.
+#
+#	CUSTOMIZED for the PVL module.
+#
+#	As a template for an idaeim module Doxyfile implementation the
+#	VERSION token with leading and trailing uderbar ('_') characters
+#	is used to stand in for the module version number which will be
+#	automatically provided by the Build/Makefile.conf Doxyfile_update
+#	target when the Doxyfile proper is generated.
+#
+#	The TAGFILES should be specified as appropriate for the module.
+#
+#
+# CVS ID: Doxyfile.template,v 1.19 2013/03/21 02:43:36 castalia Exp
+
+#---------------------------------------------------------------------------
+# Common configuration settings for all modules.
+#---------------------------------------------------------------------------
+
+@INCLUDE               = ../Build/Doxyfile.common
+
+#---------------------------------------------------------------------------
+# Project related configuration options
+#---------------------------------------------------------------------------
+
+# The PROJECT_NAME tag is a single word (or a sequence of words surrounded
+# by quotes) that should identify the project.
+
+PROJECT_NAME           = idaeim::PVL
+
+# The PROJECT_NUMBER tag can be used to enter a project or revision number.
+# This could be handy for archiving the generated documentation or
+# if some version control system is used.
+
+PROJECT_NUMBER         = _VERSION_
+
+#---------------------------------------------------------------------------
+# Configuration options related to the HTML output
+#---------------------------------------------------------------------------
+
+# The HTML_OUTPUT tag is used to specify where the HTML docs will be put.
+# If a relative path is entered the value of OUTPUT_DIRECTORY will be
+# put in front of it. If left blank `html' will be used as the default path.
+
+HTML_OUTPUT            = html/idaeim/PVL
+
+# When GENERATE_DOCSET tag is set to YES, this tag specifies a string that
+# should uniquely identify the documentation set bundle. This should be a
+# reverse domain-name style string, e.g. com.mycompany.MyDocSet. Doxygen
+# will append .docset to the name.
+
+DOCSET_BUNDLE_ID       = com.idaeim.PVL
+
+# The QHP_NAMESPACE tag specifies the namespace to use when generating
+# Qt Help Project output. For more information please see
+# http://doc.trolltech.com/qthelpproject.html#namespace
+
+QHP_NAMESPACE          = com.idaeim.PVL
+
+# A unique identifier for the eclipse help plugin. When installing the plugin
+# the directory name containing the HTML and XML files should also have
+# this name.
+
+ECLIPSE_DOC_ID         = com.idaeim.PVL
+
+#---------------------------------------------------------------------------
+# Configuration::additions related to external references
+#---------------------------------------------------------------------------
+
+# The TAGFILES option can be used to specify one or more tagfiles.
+# Optionally an initial location of the external documentation
+# can be added for each tagfile. The format of a tag file without
+# this location is as follows:
+#
+# TAGFILES = file1 file2 ...
+# Adding location for the tag files is done as follows:
+#
+# TAGFILES = file1=loc1 "file2 = loc2" ...
+# where "loc1" and "loc2" can be relative or absolute paths or
+# URLs. If a location is present for each tag, the installdox tool
+# does not have to be run to correct the links.
+# Note that each tag file must have a unique name
+# (where the name does NOT include the path)
+# If a tag file is not located in the directory in which doxygen
+# is run, you must also specify the path to the tagfile here.
+
+TAGFILES               = \
+	../Utility/docs/html/idaeim/Utility/Utility.tag=../Utility \
+	../Strings/docs/html/idaeim/Strings/Strings.tag=../Strings
+
+# When a file name is specified after GENERATE_TAGFILE, doxygen will create
+# a tag file that is based on the input files it reads.
+
+GENERATE_TAGFILE       = docs/html/idaeim/PVL/PVL.tag
+

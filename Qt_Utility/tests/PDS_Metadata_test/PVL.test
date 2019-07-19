@@ -1,0 +1,30 @@
+/*	PVL.test
+
+	CVS ID: PVL.test,v 1.1 2013/12/20 06:12:12 castalia Exp
+*/
+Token
+Group = Numbers
+	INTEGER = 7
+	REAL = 9.9
+End_Group
+Group = Strings
+	SYMBOL = 'This string is a symbol'
+	TEXT = "This string is text"
+	IDENTIFIER = identifier
+	DATE = 23-Aug-2001
+END_GROUP
+Object = Arrays
+	SET = {1, 2.2, Three, 'Four', "Five"} <values>
+	SEQUENCE =
+		(
+		101.1 <real>,
+		22 <integer>,
+		"three" <text>,
+		'four' <symbol>,
+		five <identifier>,
+		{1,2,3,4, {11,22,33} <subset>} <set>
+		)
+		<sequence>
+	ARRAY = 1.1, 202, three
+End_Object
+END
