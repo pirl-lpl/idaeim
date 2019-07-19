@@ -393,7 +393,7 @@ while (is_end (new_location = location_of
 	//	Move back to allow for a pattern match across the String end.
 	if (pattern.length () > end_location ())
 		location =
-			max (end_location () - pattern.length () + 1, location);
+			max (static_cast<Location>(end_location () - pattern.length () + 1), location);
 	slide ();
 	}
 return new_location;
