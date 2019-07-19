@@ -11,6 +11,7 @@ add_subdirectory(PVL)
 # by direct include from this directory
 # TODO should this be a target property rather than a project global?
 set(CMAKE_INCLUDE_CURRENT_DIR_IN_INTERFACE ON)
+set(CMAKE_EXPORT_PACKAGE_REGISTRY ON)
 
 include(CMakePackageConfigHelpers)
 write_basic_package_version_file(${PROJECT_NAME}-config-version.cmake VERSION ${PACKAGE_VERSION}
