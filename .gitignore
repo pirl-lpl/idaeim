@@ -2,6 +2,8 @@ CMakeFiles/
 CMakeSettings.json
 CMakeCache.txt
 cmake_install.cmake
+idaeim-config-version.cmake
+idaeim-config.cmake
 *.a
 *.o
 *.slo
