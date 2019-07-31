@@ -6,6 +6,7 @@ idaeim-config-version.cmake
 idaeim-config.cmake
 *.a
 *.o
+*.so
 *.slo
 *.dylib
 *.d
