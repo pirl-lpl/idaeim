@@ -18,5 +18,6 @@ write_basic_package_version_file(${PROJECT_NAME}-config-version.cmake VERSION ${
    COMPATIBILITY SameMajorVersion
 )
 
-export(TARGETS PVL Strings Utility NAMESPACE ${PROJECT_NAME}:: FILE ${PROJECT_NAME}-config.cmake)
+#set_target_properties(PVL PROPERTIES INTERFACE_INCLUDE_DIRECTORIES ${PROJECT_SOURCE_DIR})
+export(TARGETS PVL Strings Utility NAMESPACE idaeim:: FILE ${PROJECT_NAME}-config.cmake)
 export(PACKAGE ${PROJECT_NAME})
