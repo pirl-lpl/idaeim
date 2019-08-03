@@ -23,8 +23,8 @@ CVS ID: Line_Count_Filter.hh,v 1.13 2013/02/24 00:50:13 castalia Exp
 #ifndef	idaeim_Strings_Line_Count_Filter_hh
 #define	idaeim_Strings_Line_Count_Filter_hh
 
-#include	"Strings/String_Filter.hh"
-#include	"Strings/Sliding_String.hh"
+#include	"../Strings/String_Filter.hh"
+#include	"../Strings/Sliding_String.hh"
 
 #include	<vector>
 

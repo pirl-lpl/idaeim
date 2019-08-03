@@ -23,10 +23,10 @@ CVS ID: Parser.hh,v 1.30 2013/02/24 00:50:49 castalia Exp
 #ifndef idaeim_PVL_Parser_hh
 #define idaeim_PVL_Parser_hh
 
-#include	"PVL/Parameter.hh"
-#include	"PVL/Value.hh"
-#include	"PVL/PVL_Exceptions.hh"
-#include	"Strings/Sliding_String.hh"
+#include	"Parameter.hh"
+#include	"Value.hh"
+#include	"PVL_Exceptions.hh"
+#include	"../Strings/Sliding_String.hh"
 
 
 namespace idaeim

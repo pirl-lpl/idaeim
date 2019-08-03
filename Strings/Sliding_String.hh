@@ -23,8 +23,8 @@ CVS ID: Sliding_String.hh,v 1.20 2013/07/18 05:48:55 castalia Exp
 #ifndef	idaeim_Strings_Sliding_String_hh
 #define	idaeim_Strings_Sliding_String_hh
 
-#include	"Strings/String.hh"
-#include	"Strings/String_Filter.hh"
+#include	"String.hh"
+#include	"String_Filter.hh"
 
 #include	<iosfwd>
 #include	<vector>

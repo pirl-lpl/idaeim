@@ -23,8 +23,8 @@ CVS ID: Parameter.hh,v 1.56 2014/04/16 02:49:06 castalia Exp
 #ifndef idaeim_PVL_Parameter_hh
 #define idaeim_PVL_Parameter_hh
 
-#include	"PVL/Value.hh"
-#include	"PVL/Vectal.hh"
+#include	"Value.hh"
+#include	"Vectal.hh"
 
 #include	<string>
 #include	<iostream>	//	Needed for default cin and cout arguments.

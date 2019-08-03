@@ -23,7 +23,7 @@ CVS ID: VMS_Records_Filter.hh,v 1.15 2013/02/24 00:50:13 castalia Exp
 #ifndef	idaeim_Strings_VMS_Records_Filter_hh
 #define	idaeim_Strings_VMS_Records_Filter_hh
 
-#include	"Strings/String_Filter.hh"
+#include	"../Strings/String_Filter.hh"
 
 
 namespace idaeim
