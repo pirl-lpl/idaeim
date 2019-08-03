@@ -6,6 +6,7 @@ add_library(PVL SHARED
    Value.cc
    Vectal.cc
 )
-set_property(TARGET PVL PROPERTY POSITION_INDEPENDENT_CODE ON)
-target_include_directories(PVL PUBLIC ${PROJECT_SOURCE_DIR})
+
+set_target_properties(PVL PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS ON POSITION_INDEPENDENT_CODE ON)
+target_include_directories(PVL PUBLIC ${PROJECT_SOURCE_DIR} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(PVL Strings Utility)
