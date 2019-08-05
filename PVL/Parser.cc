@@ -22,8 +22,8 @@ CVS ID:	Parser.cc,v 1.43 2013/02/24 00:50:49 castalia Exp
 
 #include	"Parser.hh"
 
-#include	"Strings/VMS_Records_Filter.hh"
-#include	"Strings/Line_Count_Filter.hh"
+#include	"../Strings/VMS_Records_Filter.hh"
+#include	"../Strings/Line_Count_Filter.hh"
 
 #include	<string>
 using std::string;

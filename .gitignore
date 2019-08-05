@@ -1,3 +1,4 @@
+.cmake/
 CMakeFiles/
 CMakeSettings.json
 CMakeCache.txt
@@ -25,3 +26,4 @@ obj_release/
 obj_debug/
 moc_debug/
 .vs/
+out/

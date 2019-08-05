@@ -23,8 +23,8 @@ CVS ID: Lister.hh,v 1.28 2013/02/24 00:50:49 castalia Exp
 #ifndef idaeim_PVL_Lister_hh
 #define idaeim_PVL_Lister_hh
 
-#include	"PVL/Parameter.hh"
-#include	"PVL/Value.hh"
+#include	"Parameter.hh"
+#include	"Value.hh"
 
 #include	<string>
 #include	<iosfwd>

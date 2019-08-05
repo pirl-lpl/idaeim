@@ -25,7 +25,7 @@ CVS ID: Value.cc,v 1.46 2013/09/17 03:52:51 castalia Exp
 #include	"Lister.hh"
 
 //	For Integer to string in arbitrary base notation.
-#include	"Strings/String.hh"
+#include	"../Strings/String.hh"
 
 #include	<sstream>
 using std::ostringstream;
