@@ -23,7 +23,7 @@ CVS ID:	String.hh,v 1.22 2013/02/24 23:52:50 castalia Exp
 #ifndef	idaeim_Strings_String_hh
 #define	idaeim_Strings_String_hh
 
-#include	"../Utility/Types.hh"
+#include	"Utility/Types.hh"
 
 #include	<string>
 

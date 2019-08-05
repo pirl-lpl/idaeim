@@ -23,10 +23,10 @@ CVS ID: PVL.hh,v 1.13 2013/02/24 00:50:49 castalia Exp
 #ifndef idaeim_PVL_hh
 #define idaeim_PVL_hh
 
-#include	"Parameter.hh"
-#include	"Value.hh"
-#include	"Parser.hh"
-#include	"Lister.hh"
-#include	"PVL_Exceptions.hh"
+#include	"PVL/Parameter.hh"
+#include	"PVL/Value.hh"
+#include	"PVL/Parser.hh"
+#include	"PVL/Lister.hh"
+#include	"PVL/PVL_Exceptions.hh"
 
 #endif

@@ -23,7 +23,7 @@ CVS ID: PVL_Exceptions.hh,v 1.18 2014/04/17 03:36:00 castalia Exp
 #ifndef idaeim_PVL_Exceptions_hh
 #define idaeim_PVL_Exceptions_hh
 
-#include	"../Utility/Exception.hh"
+#include	"Utility/Exception.hh"
 
 #include	<string>
 

@@ -23,9 +23,9 @@ CVS ID: Value.hh,v 1.54 2013/09/17 03:52:51 castalia Exp
 #ifndef idaeim_PVL_Value_hh
 #define idaeim_PVL_Value_hh
 
-#include	"../Utility/Types.hh"
-#include	"PVL_Exceptions.hh"
-#include	"Vectal.hh"
+#include	"Utility/Types.hh"
+#include	"PVL/PVL_Exceptions.hh"
+#include	"PVL/Vectal.hh"
 
 #include	<string>
 #include	<iostream>	//	Needed for default cin and cout arguments.
