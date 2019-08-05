@@ -1,4 +1,10 @@
 
 add_library(Strings Line_Count_Filter.cc Sliding_String.cc String.cc VMS_Records_Filter.cc)
-set_property(TARGET Strings PROPERTY POSITION_INDEPENDENT_CODE ON)
-target_include_directories(Strings PUBLIC ${PROJECT_SOURCE_DIR})
+set_target_properties(Strings PROPERTIES POSITION_INDEPENDENT_CODE ON WINDOWS_EXPORT_ALL_SYMBOLS ON)
+target_include_directories(Strings
+    PUBLIC 
+        $<INSTALL_INTERFACE:include>    
+        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>
+    PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}
+)
