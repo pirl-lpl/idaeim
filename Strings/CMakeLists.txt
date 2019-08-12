@@ -1,3 +1,23 @@
-add_library(Strings Line_Count_Filter.cc Sliding_String.cc String.cc VMS_Records_Filter.cc)
-set_target_properties(Strings PROPERTIES POSITION_INDEPENDENT_CODE ON WINDOWS_EXPORT_ALL_SYMBOLS ON)
+add_library(objStrings OBJECT
+String_Filter.hh Line_Count_Filter.hh Sliding_String.hh String.hh VMS_Records_Filter.hh
+Line_Count_Filter.cc Sliding_String.cc String.cc VMS_Records_Filter.cc)
+
+set_target_properties(objStrings PROPERTIES POSITION_INDEPENDENT_CODE ON)
+
+add_library(Strings SHARED $<TARGET_OBJECTS:objStrings>)
+add_library(sllStrings STATIC $<TARGET_OBJECTS:objStrings>)
+
+if (WIN32)
+	set_target_properties(Strings PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS ON)
+	set_target_properties(sllStrings PROPERTIES OUTPUT_NAME libStrings)
+
+	if(${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.13")
+		target_link_options(Strings PRIVATE "/MANIFEST:NO")
+	else()
+		set(CMAKE_SHARED_LINKER_FLAGS "/MANIFEST:NO")
+	endif()
+else()
+	set_target_properties(sllStrings PROPERTIES OUTPUT_NAME Strings)
+endif()
+
 target_include_directories(Strings PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_SOURCE_DIR})
