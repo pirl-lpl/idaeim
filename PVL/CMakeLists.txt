@@ -1,6 +1,6 @@
 # the last three in this list are because
 
-set(srcPVL
+add_library(objPVL OBJECT
    Lister.cc
    PVL_Exceptions.cc
    Parameter.cc
@@ -8,19 +8,6 @@ set(srcPVL
    Value.cc
    Vectal.cc
 )
-
-# MSVC needs the definition of the static symbols
-# to link (EXPORT_ALL_SYMBOLS is only classes and methods)
-# via the IMPLIB, which is what cmake uses to link
-# target dependencies
-  if (WIN32)
-	list(APPEND srcPVL
-   ../Strings/Sliding_String.cc
-   ../Strings/String.cc
-   ../Utility/Exception.cc)
-endif()
-
-add_library(objPVL OBJECT ${srcPVL})
 
 set_target_properties(objPVL PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
@@ -35,6 +22,10 @@ if (WIN32)
 	else()
 		set(CMAKE_SHARED_LINKER_FLAGS "/MANIFEST:NO")
 	endif()
+	#
+	# TODO this hack copies the static lib over the import lib
+	# because the latter doesn't have symbols for static data fields
+	add_custom_command(TARGET PVL POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:sllPVL> PVL.lib)
 else()
 	set_target_properties(sllPVL PROPERTIES OUTPUT_NAME PVL)
 endif()
