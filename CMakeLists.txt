@@ -10,14 +10,6 @@ add_subdirectory(Utility)
 add_subdirectory(Strings)
 add_subdirectory(PVL)
 
-#include(GNUInstallDirs)
-#install(TARGETS PVL Strings Utility
-#    EXPORT ${PROJECT_NAME}
-#    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-#    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-#    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-#)
-
 include(CMakePackageConfigHelpers)
 write_basic_package_version_file(${PROJECT_NAME}-config-version.cmake VERSION ${PACKAGE_VERSION}
    COMPATIBILITY SameMajorVersion
@@ -32,3 +24,5 @@ set(CMAKE_EXPORT_PACKAGE_REGISTRY ON)
 export(TARGETS PVL Strings Utility
 	   NAMESPACE ${PROJECT_NAME}:: FILE ${PROJECT_NAME}-config.cmake)
 export(PACKAGE ${PROJECT_NAME})
+
+

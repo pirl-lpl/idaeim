@@ -1,6 +1,7 @@
 add_library(objStrings OBJECT
-String_Filter.hh Line_Count_Filter.hh Sliding_String.hh String.hh VMS_Records_Filter.hh
 Line_Count_Filter.cc Sliding_String.cc String.cc VMS_Records_Filter.cc)
+
+set(headers String_Filter.hh Line_Count_Filter.hh Sliding_String.hh String.hh VMS_Records_Filter.hh)
 
 set_target_properties(objStrings PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
@@ -26,3 +27,16 @@ else()
 endif()
 
 target_include_directories(Strings PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_SOURCE_DIR})
+
+set_target_properties(Strings PROPERTIES PUBLIC_HEADER "${headers}")
+
+include(GNUInstallDirs)
+install(TARGETS Strings sllStrings
+    EXPORT ${PROJECT_NAME}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/Strings
+)
+
+install(FILES Strings.hh DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})

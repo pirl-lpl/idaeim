@@ -1,7 +1,9 @@
 add_library(objUtility OBJECT
-Types.hh STRINGIFY.hh
-Checker.hh Exception.hh Internet_Checksum.hh
 Checker.cc Exception.cc Internet_Checksum.cc)
+
+set(headers Types.hh STRINGIFY.hh
+Checker.hh Exception.hh Internet_Checksum.hh
+)
 
 set_target_properties(objUtility PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
@@ -26,3 +28,14 @@ else()
 endif()
 
 target_include_directories(Utility PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_SOURCE_DIR})
+
+set_target_properties(Utility PROPERTIES PUBLIC_HEADER "${headers}")
+
+include(GNUInstallDirs)
+install(TARGETS Utility sllUtility
+    EXPORT ${PROJECT_NAME}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/Utility
+)

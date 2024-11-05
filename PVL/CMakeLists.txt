@@ -9,10 +9,21 @@ add_library(objPVL OBJECT
    Vectal.cc
 )
 
+set(headers
+   Lister.hh
+   PVL_Exceptions.hh
+   Parameter.hh
+   Parser.hh
+   Value.hh
+   Vectal.hh
+)
+
 set_target_properties(objPVL PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
 add_library(PVL SHARED $<TARGET_OBJECTS:objPVL>)
 add_library(sllPVL STATIC $<TARGET_OBJECTS:objPVL>)
+
+set_target_properties(PVL PROPERTIES PUBLIC_HEADER "${headers}")
 
 if (WIN32)
 	set_target_properties(PVL PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS ON)
@@ -32,3 +43,14 @@ endif()
 
 target_include_directories(PVL PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_SOURCE_DIR})
 target_link_libraries(PVL Utility Strings)
+
+include(GNUInstallDirs)
+install(TARGETS PVL sllPVL
+    EXPORT ${PROJECT_NAME}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/PVL
+)
+
+install(FILES PVL.hh DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
