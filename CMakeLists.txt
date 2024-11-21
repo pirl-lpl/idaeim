@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.11)
+cmake_minimum_required(VERSION 3.13)
 
 project(idaeim VERSION 2.3.4 DESCRIPTION "C++ PVL Parser Library")
 
@@ -20,9 +20,16 @@ write_basic_package_version_file(${PROJECT_NAME}-config-version.cmake VERSION ${
 #   NAMESPACE ${PROJECT_NAME}::
 #   DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}-${PACKAGE_VERSION})
 
+include(GNUInstallDirs)
+
+install(EXPORT Utility-config
+    NAMESPACE ${PROJECT_NAME}:: DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/cmake/Utility)
+install(EXPORT Strings-config
+    NAMESPACE ${PROJECT_NAME}:: DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/cmake/Strings)
+install(EXPORT PVL-config
+        NAMESPACE ${PROJECT_NAME}:: DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/cmake/PVL)
+
 set(CMAKE_EXPORT_PACKAGE_REGISTRY ON)
-export(TARGETS PVL Strings Utility
-	   NAMESPACE ${PROJECT_NAME}:: FILE ${PROJECT_NAME}-config.cmake)
 export(PACKAGE ${PROJECT_NAME})
 
-
+install(EXPORT ${PROJECT_NAME}-config NAMESPACE ${PROJECT_NAME}:: DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/cmake)

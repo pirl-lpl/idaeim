@@ -21,32 +21,29 @@ set(headers
 set_target_properties(objPVL PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
 add_library(PVL SHARED $<TARGET_OBJECTS:objPVL>)
-add_library(sllPVL STATIC $<TARGET_OBJECTS:objPVL>)
+add_library(PVL_static STATIC $<TARGET_OBJECTS:objPVL>)
 
 set_target_properties(PVL PROPERTIES PUBLIC_HEADER "${headers}")
+set_target_properties(PVL_static PROPERTIES PUBLIC_HEADER "${headers}")
 
 if (WIN32)
 	set_target_properties(PVL PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS ON)
-	set_target_properties(sllPVL PROPERTIES OUTPUT_NAME libPVL)
-	if(${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.13")
-		target_link_options(PVL PRIVATE "/MANIFEST:NO")
-	else()
-		set(CMAKE_SHARED_LINKER_FLAGS "/MANIFEST:NO")
-	endif()
+	target_link_options(PVL PRIVATE "/MANIFEST:NO")
+
 	#
 	# TODO this hack copies the static lib over the import lib
 	# because the latter doesn't have symbols for static data fields
-	add_custom_command(TARGET PVL POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:sllPVL> PVL.lib)
-else()
-	set_target_properties(sllPVL PROPERTIES OUTPUT_NAME PVL)
+	# add_custom_command(TARGET PVL POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:sllPVL> PVL.lib)
 endif()
 
-target_include_directories(PVL PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_SOURCE_DIR})
+#target_include_directories(PVL PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_SOURCE_DIR})
 target_link_libraries(PVL Utility Strings)
 
+export(TARGETS PVL PVL_static NAMESPACE idaeim:: FILE "PVL-config.cmake")
+
 include(GNUInstallDirs)
-install(TARGETS PVL sllPVL
-    EXPORT ${PROJECT_NAME}
+install(TARGETS PVL PVL_static
+    EXPORT PVL-config
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}

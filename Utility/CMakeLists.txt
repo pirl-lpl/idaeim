@@ -8,32 +8,29 @@ Checker.hh Exception.hh Internet_Checksum.hh
 set_target_properties(objUtility PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
 add_library(Utility SHARED $<TARGET_OBJECTS:objUtility>)
-add_library(sllUtility STATIC $<TARGET_OBJECTS:objUtility>)
+add_library(Utility_static STATIC $<TARGET_OBJECTS:objUtility>)
 
 if (WIN32)
-   set_target_properties(sllUtility PROPERTIES OUTPUT_NAME libUtility)
 	set_target_properties(Utility PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS ON)
-	if(${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.13")
 		target_link_options(Utility PRIVATE "/MANIFEST:NO")
-	else()
-		set(CMAKE_SHARED_LINKER_FLAGS "/MANIFEST:NO")
-	endif()
 	#
 	# TODO this hack copies the static lib over the import lib
 	# because the latter doesn't have symbols for static data fields
-	add_custom_command(TARGET Utility POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:sllUtility> Utility.lib)
-
-else()
-	set_target_properties(sllUtility PROPERTIES OUTPUT_NAME Utility)
+	#add_custom_command(TARGET Utility POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:sllUtility> Utility.lib)
 endif()
 
-target_include_directories(Utility PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_SOURCE_DIR})
+#target_include_directories(Utility INTERFACE
+# $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+# $<INSTALL_INTERFACE:include>)
 
 set_target_properties(Utility PROPERTIES PUBLIC_HEADER "${headers}")
+set_target_properties(Utility_static PROPERTIES PUBLIC_HEADER "${headers}")
+
+export(TARGETS Utility Utility_static NAMESPACE idaeim:: FILE "Utility-config.cmake")
 
 include(GNUInstallDirs)
-install(TARGETS Utility sllUtility
-    EXPORT ${PROJECT_NAME}
+install(TARGETS Utility Utility_static
+    EXPORT Utility-config
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
