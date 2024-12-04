@@ -27,7 +27,7 @@ export(TARGETS Strings Strings_static NAMESPACE idaeim:: FILE "Strings-config.cm
 
 include(GNUInstallDirs)
 install(TARGETS Strings Strings_static
-    EXPORT Strings-config
+    EXPORT ${PROJECT_NAME}-export
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}

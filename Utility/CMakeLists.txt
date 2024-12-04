@@ -11,12 +11,12 @@ add_library(Utility SHARED $<TARGET_OBJECTS:objUtility>)
 add_library(Utility_static STATIC $<TARGET_OBJECTS:objUtility>)
 
 if (WIN32)
-	set_target_properties(Utility PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS ON)
-		target_link_options(Utility PRIVATE "/MANIFEST:NO")
-	#
-	# TODO this hack copies the static lib over the import lib
-	# because the latter doesn't have symbols for static data fields
-	#add_custom_command(TARGET Utility POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:sllUtility> Utility.lib)
+    set_target_properties(Utility PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS ON)
+    target_link_options(Utility PRIVATE "/MANIFEST:NO")
+    #
+    # TODO this hack copies the static lib over the import lib
+    # because the latter doesn't have symbols for static data fields
+    #add_custom_command(TARGET Utility POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:sllUtility> Utility.lib)
 endif()
 
 #target_include_directories(Utility INTERFACE
@@ -30,7 +30,7 @@ export(TARGETS Utility Utility_static NAMESPACE idaeim:: FILE "Utility-config.cm
 
 include(GNUInstallDirs)
 install(TARGETS Utility Utility_static
-    EXPORT Utility-config
+    EXPORT ${PROJECT_NAME}-export
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
